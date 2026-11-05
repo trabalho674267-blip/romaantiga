@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banquete Romano - Quiz do 6º Ano</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        deepBg: '#080d1a',
+                        cardBg: '#0f172a',
+                        neonPurple: '#a855f7',
+                        neonPurpleDark: '#7e22ce',
+                        neonPurpleLight: '#c084fc',
+                        glowColor: 'rgba(168, 85, 247, 0.4)',
+                        goldAccent: '#fbbf24'
+                    },
+                    fontFamily: {
+                        title: ['Fredoka', 'sans-serif'],
+                        body: ['Outfit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #080d1a;
+            color: #f1f5f9;
+        }
+
+        h1, h2, h3, .font-title {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        /* Efeitos de Iluminação Neon Roxo */
+        .glow-purple-box {
+            box-shadow: 0 0 25px rgba(168, 85, 247, 0.35), inset 0 0 15px rgba(168, 85, 247, 0.15);
+        }
+
+        .glow-purple-text {
+            text-shadow: 0 0 12px rgba(192, 132, 252, 0.8);
+        }
+
+        .glow-button {
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .glow-button:hover {
+            box-shadow: 0 0 25px rgba(192, 132, 252, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .glow-button:active {
+            transform: translateY(1px);
+        }
+
+        /* Animação do progresso */
+        .progress-bar-fill {
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Animação das opções */
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.95) translateY(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .animate-pop {
+            animation: popIn 0.3s ease-out forwards;
+        }
+
+        /* Pulso suave nos ícones */
+        .pulse-glow {
+            animation: pulseGlow 2s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { filter: drop-shadow(0 0 5px rgba(168, 85, 247, 0.4)); }
+            100% { filter: drop-shadow(0 0 18px rgba(192, 132, 252, 0.9)); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-between p-4 sm:p-6 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-deepBg to-black selection:bg-neonPurple selection:text-white">
+
+    <!-- CABEÇALHO DO APLICATIVO -->
+    <header class="w-full max-w-2xl mx-auto flex items-center justify-between py-4 px-2">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-neonPurpleDark to-neonPurpleLight flex items-center justify-center shadow-lg glow-purple-box">
+                <i class="fa-solid fa-utensils text-white text-2xl pulse-glow"></i>
+            </div>
+            <div>
+                <h1 class="text-xl sm:text-2xl font-bold text-white tracking-wide leading-none">Banquete Romano</h1>
+                <p class="text-xs text-neonPurpleLight font-medium mt-1">História & Culinária • 6º Ano</p>
+            </div>
+        </div>
+
+        <div class="bg-slate-900/90 border border-neonPurple/40 rounded-xl px-3 py-1.5 flex items-center gap-2 shadow-md">
+            <i class="fa-solid fa-trophy text-goldAccent text-lg"></i>
+            <span id="score-display" class="font-title text-lg text-white font-bold">0 pts</span>
+        </div>
+    </header>
+
+    <!-- CONTAINER PRINCIPAL -->
+    <main class="w-full max-w-2xl mx-auto my-auto py-2">
+
+        <!-- TELA INICIAL (START) -->
+        <div id="screen-start" class="bg-cardBg/90 border-2 border-neonPurple/40 rounded-3xl p-6 sm:p-8 text-center glow-purple-box backdrop-blur-md transition-all">
+            <div class="inline-block p-4 rounded-full bg-neonPurple/10 border border-neonPurple/30 mb-4">
+                <i class="fa-solid fa-pizza-slice text-5xl text-neonPurpleLight pulse-glow"></i>
+            </div>
+
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-3 glow-purple-text">
+                O que os Romanos Comiam?
+            </h2>
+
+            <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-6 max-w-lg mx-auto">
+                Você sabia que na Roma Antiga não existia açúcar e eles adoravam um molho feito com peixe fermentado? 🐟🍯
+                <br><br>
+                Venha testar seus conhecimentos e descobrir curiosidades incríveis sobre os alimentos e banquetes do Império Romano!
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6 text-xs sm:text-sm text-slate-400">
+                <div class="flex items-center gap-2 bg-slate-800/80 px-3 py-2 rounded-lg border border-slate-700">
+                    <i class="fa-solid fa-list-check text-neonPurpleLight"></i> 10 Perguntas Divertidas
+                </div>
+                <div class="flex items-center gap-2 bg-slate-800/80 px-3 py-2 rounded-lg border border-slate-700">
+                    <i class="fa-solid fa-award text-goldAccent"></i> Ganhe Medalhas de Roma
+                </div>
+            </div>
+
+            <button onclick="startQuiz()" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-neonPurpleDark via-neonPurple to-neonPurpleLight text-white font-title text-xl font-bold tracking-wider glow-button flex items-center justify-center gap-3 mx-auto">
+                <span>INICIAR BANQUETE!</span>
+                <i class="fa-solid fa-play"></i>
+            </button>
+        </div>
+
+        <!-- TELA DE PERGUNTAS (QUIZ ACTIVE) -->
+        <div id="screen-quiz" class="hidden bg-cardBg/95 border-2 border-neonPurple/40 rounded-3xl p-5 sm:p-7 glow-purple-box backdrop-blur-md">
+            
+            <!-- Barra de Progresso e Numeração -->
+            <div class="mb-6">
+                <div class="flex justify-between items-center text-xs font-bold text-slate-300 mb-2">
+                    <span id="question-count" class="text-neonPurpleLight uppercase tracking-wider">Pergunta 1 de 10</span>
+                    <span id="streak-badge" class="hidden text-amber-400 font-extrabold flex items-center gap-1 animate-pulse">
+                        <i class="fa-solid fa-fire"></i> Combo x<span id="streak-count">1</span>
+                    </span>
+                </div>
+                <div class="w-full bg-slate-800 h-3 rounded-full overflow-hidden p-0.5 border border-slate-700">
+                    <div id="progress-bar" class="progress-bar-fill bg-gradient-to-r from-neonPurpleDark to-neonPurpleLight h-full rounded-full w-10"></div>
+                </div>
+            </div>
+
+            <!-- Enunciado da Pergunta -->
+            <div class="mb-6">
+                <span id="question-category" class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-neonPurple/20 text-neonPurpleLight border border-neonPurple/30 mb-2">
+                    Categoria
+                </span>
+                <h3 id="question-text" class="text-xl sm:text-2xl font-bold text-white leading-snug">
+                    Carregando pergunta...
+                </h3>
+            </div>
+
+            <!-- Lista de Opções de Resposta -->
+            <div id="options-container" class="space-y-3 mb-6">
+                <!-- Opções injetadas via JavaScript -->
+            </div>
+
+            <!-- Caixa de Feedback e Curiosidade (Aparece após responder) -->
+            <div id="feedback-box" class="hidden rounded-2xl p-4 mb-6 transition-all duration-300">
+                <div class="flex items-start gap-3">
+                    <div id="feedback-icon" class="text-2xl mt-0.5"></div>
+                    <div>
+                        <h4 id="feedback-title" class="font-title text-base sm:text-lg font-bold mb-1"></h4>
+                        <p id="feedback-text" class="text-xs sm:text-sm leading-relaxed"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botão Próxima Pergunta -->
+            <button id="next-btn" onclick="nextQuestion()" class="hidden w-full py-3.5 rounded-xl bg-gradient-to-r from-neonPurple to-neonPurpleLight text-white font-title text-lg font-bold glow-button items-center justify-center gap-2">
+                <span>PRÓXIMA PERGUNTA</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <!-- TELA DE RESULTADO (FINAL) -->
+        <div id="screen-result" class="hidden bg-cardBg/90 border-2 border-neonPurple/40 rounded-3xl p-6 sm:p-8 text-center glow-purple-box backdrop-blur-md">
+            
+            <div id="medal-icon-box" class="w-24 h-24 rounded-3xl bg-gradient-to-tr from-amber-500 to-amber-300 text-slate-950 flex items-center justify-center text-5xl mx-auto mb-4 shadow-xl glow-purple-box">
+                🥇
+            </div>
+
+            <span id="rank-title-badge" class="inline-block px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-widest bg-amber-400/20 text-amber-300 border border-amber-400/40 mb-2">
+                Gladiador Culinário
+            </span>
+
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-2">
+                Banquete Finalizado!
+            </h2>
+
+            <p id="result-message" class="text-slate-300 text-sm sm:text-base mb-6">
+                Você mandou muito bem conhecendo a história da culinária romana!
+            </p>
+
+            <!-- Placar de Estatísticas -->
+            <div class="grid grid-cols-2 gap-3 max-w-md mx-auto mb-6">
+                <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
+                    <span class="block text-xs text-slate-400 font-medium uppercase">Acertos</span>
+                    <span id="stat-correct" class="text-2xl font-bold text-emerald-400 font-title">0/10</span>
+                </div>
+                <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
+                    <span class="block text-xs text-slate-400 font-medium uppercase">Pontuação</span>
+                    <span id="stat-score" class="text-2xl font-bold text-neonPurpleLight font-title">0 pts</span>
+                </div>
+            </div>
+
+            <!-- Explicação do Rank -->
+            <div id="rank-description" class="bg-slate-900/60 border border-slate-800 rounded-xl p-4 text-xs sm:text-sm text-slate-300 mb-6 text-left leading-relaxed">
+                <!-- Descrição da conquista -->
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <button onclick="restartQuiz()" class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-neonPurpleDark to-neonPurple text-white font-title font-bold glow-button flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-rotate-left"></i>
+                    <span>JOGAR NOVAMENTE</span>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- RODAPÉ -->
+    <footer class="w-full max-w-2xl mx-auto text-center py-3 text-xs text-slate-500">
+        <p>Ensino Fundamental • História do 6º Ano • A Vida na Roma Antiga</p>
+    </footer>
+
+    <!-- SCRIPT DA LÓGICA DO QUIZ -->
+    <script>
+        // BANCO DE DADOS DE PERGUNTAS (Adaptado para 6º Ano)
+        const quizQuestions = [
+            {
+                category: "🍕 Comida de Rua",
+                question: "Onde os romanos que não tinham cozinha em casa costumavam comprar comida rápida e quente na rua?",
+                options: [
+                    "Nos grandes supermercados romanos",
+                    "No Thermopolium (a lanchonete da antiguidade)",
+                    "Apenas nas padarias do Imperador",
+                    "Eles não comiam comida quente na rua"
+                ],
+                correct: 1,
+                explanation: "O **Thermopolium** era como o 'fast-food' da Roma Antiga! Tinha balcões com potes de cerâmica embutidos que mantinham a comida quentinha para os trabalhadores e plebeus."
+            },
+            {
+                category: "🐟 Tempero Famoso",
+                question: "Qual era o molho salgado super famoso e essencial, feito com peixes fermentados ao sol?",
+                options: [
+                    "Ketchup de tomate",
+                    "Garum",
+                    "Maionese romana",
+                    "Molho Xadrez"
+                ],
+                correct: 1,
+                explanation: "O **Garum** era o tempero nº 1 de Roma! Feito com peixes e sal deixados ao sol por semanas, ele dava um sabor bem salgado e marcante para quase todos os pratos."
+            },
+            {
+                category: "🛋️ Banquetes e Luxo",
+                question: "Como os romanos ricos (patrícios) se acomodavam para comer nos banquetes chiques?",
+                options: [
+                    "Em pé ao redor de uma fogueira",
+                    "Sentados em cadeiras de balanço",
+                    "Deitados de lado em sofás confortáveis (triclínios)",
+                    "Ajoelhados no chão de pedra"
+                ],
+                correct: 2,
+                explanation: "Nos banquetes, os ricos comiam **deitados de lado em sofás chamados triclínios**. Eles achavam esse estilo super chique, relaxante e símbolo de nobreza!"
+            },
+            {
+                category: "🥣 O Prato do Povo",
+                question: "Qual era o prato mais simples, barato e comum do dia a dia dos soldados e plebeus?",
+                options: [
+                    "A 'Puls' (um mingau de grãos e cereais)",
+                    "Hambúrguer de carne de urso",
+                    "Sopa de batata frita",
+                    "Pizza recheada com queijo"
+                ],
+                correct: 0,
+                explanation: "A **Puls** era uma papinha/mingau feito cozinhando grãos de trigo ou cevada na água com sal. Às vezes adicionavam legumes ou queijo quando tinham dinheiro."
+            },
+            {
+                category: "🍯 Doces Romanos",
+                question: "Como os romanos não conheciam o açúcar de cana moderno, o que eles usavam para adoçar doces e vinhos?",
+                options: [
+                    "Açúcar mascavo importado",
+                    "Mel de abelha natural",
+                    "Adoçante artificial",
+                    "Suco de limão concentrado"
+                ],
+                correct: 1,
+                explanation: "O **Mel** era o grande 'ouro doce' da antiguidade! Era usado para adoçar bolos de figo, frutas, sobremesas e até misturado nas carnes e vinhos."
+            },
+            {
+                category: "🍷 Bebida Favorita",
+                question: "Como os romanos costumavam beber o vinho para ele não ficar forte e amargo demais?",
+                options: [
+                    "Puro e bem gelado com gelo",
+                    "Misturado com água, mel e ervas",
+                    "Fervido até virar refrigerante",
+                    "Misturado com leite de cabra"
+                ],
+                correct: 1,
+                explanation: "Beber vinho puro era visto como hábito 'bárbaro' pelos romanos! Eles **sempre misturavam o vinho com água** (quente ou fria) e adicionavam mel e especiarias."
+            },
+            {
+                category: "🖐️ Modos à Mesa",
+                question: "Como a maioria dos romanos comia os alimentos na mesa durante as refeições?",
+                options: [
+                    "Usando garfos de plástico moderno",
+                    "Apenas com hashis (palitinhos orientais)",
+                    "Diretamente com as mãos e o auxílio de colheres",
+                    "Não tocavam na comida, eram alimentados por robôs"
+                ],
+                correct: 2,
+                explanation: "O garfo como conhecemos não existia na Roma Antiga! Eles **comiam quase tudo com as mãos** e usavam colheres e facas para cortar as carnes."
+            },
+            {
+                category: "🌿 Rota de Temperos",
+                question: "Quais especiarias valiosas vinham de longe (do Oriente) para dar sabor à comida dos ricos em Roma?",
+                options: [
+                    "Pimenta-do-reino e canela",
+                    "Orégano e manjericão em pó",
+                    "Ketchup e mostarda amarela",
+                    "Páprica doce e chimichurri"
+                ],
+                correct: 0,
+                explanation: "A **pimenta-do-reino e a canela** vinham de rotas comerciais distantes da Ásia e Índia. Eram tão caras que valiam quase o seu peso em prata!"
+            },
+            {
+                category: "🏛️ Mitos da História",
+                question: "O que era na verdade o 'vomitório' (vomitorium) nos grandes edifícios romanos?",
+                options: [
+                    "Um quarto nojento para vomitar a comida dos banquetes",
+                    "As saídas e corredores largos para esvaziar o Coliseu rapidamente",
+                    "Um banheiro público exclusivo para imperadores",
+                    "O local onde guardavam os restos de comida"
+                ],
+                correct: 1,
+                explanation: "Mito detonado! O **vomitório** vem do latim *vomere* (expelir). Era apenas o nome das portas e corredores de saída rápida dos estádio para 'expelir' a multidão!"
+            },
+            {
+                category: "🍞 Política e Povo",
+                question: "O que significava a famosa estratégia dos imperadores chamada 'Pão e Circo'?",
+                options: [
+                    "Uma receita de pão em formato de palhaço de circo",
+                    "Distribuir comida de graça e espetáculos divertidos para acalmar o povo",
+                    "Obrigado todos os padeiros a trabalharem no circo",
+                    "Proibir a população de comer trigo durante as festas"
+                ],
+                correct: 1,
+                explanation: "'Pão e Circo' era a política para manter a população de Roma quieta e feliz: dava-se **trigo gratuito (pão)** e **corridas de bigas e lutas no Coliseu (circo)**."
+            }
+        ];
+
+        // VARIÁVEIS DE ESTADO DO JOGO
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let correctAnswersCount = 0;
+        let streak = 0;
+        let isAnswered = false;
+
+        // EFEITOS SONOROS SIMULADOS COM WEB AUDIO API
+        function playSound(type) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                if (type === 'correct') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+                    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.2); // A5
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.3);
+                } else if (type === 'wrong') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, ctx.currentTime); // A3
+                    osc.frequency.exponentialRampToValueAtTime(130, ctx.currentTime + 0.25);
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.3);
+                } else if (type === 'win') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(440, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.5);
+                    gain.gain.setValueAtTime(0.4, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.6);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.6);
+                }
+            } catch (e) {
+                // Navegador pode bloquear áudio automático
+            }
+        }
+
+        // INICIAR O QUIZ
+        function startQuiz() {
+            document.getElementById('screen-start').classList.add('hidden');
+            document.getElementById('screen-quiz').classList.remove('hidden');
+            document.getElementById('screen-result').classList.add('hidden');
+
+            currentQuestionIndex = 0;
+            score = 0;
+            correctAnswersCount = 0;
+            streak = 0;
+            updateScoreDisplay();
+            loadQuestion();
+        }
+
+        // CARREGAR PERGUNTA ATUAL
+        function loadQuestion() {
+            isAnswered = false;
+            const q = quizQuestions[currentQuestionIndex];
+
+            // Atualiza contador e progresso
+            document.getElementById('question-count').innerText = `Pergunta ${currentQuestionIndex + 1} de ${quizQuestions.length}`;
+            document.getElementById('question-category').innerText = q.category;
+            document.getElementById('question-text').innerText = q.question;
+
+            const progressPercent = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+
+            // Oculta caixa de feedback e botão próximo
+            document.getElementById('feedback-box').classList.add('hidden');
+            document.getElementById('next-btn').classList.add('hidden');
+            document.getElementById('next-btn').classList.remove('flex');
+
+            // Renderiza opções
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            const letters = ['A', 'B', 'C', 'D'];
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left p-4 rounded-2xl bg-slate-900/80 hover:bg-slate-800 border-2 border-slate-700/80 hover:border-neonPurple/60 text-slate-200 transition-all duration-200 flex items-center justify-between group animate-pop`;
+                btn.style.animationDelay = `${idx * 0.08}s`;
+                btn.onclick = () => checkAnswer(idx);
+
+                btn.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-slate-800 border border-slate-600 text-neonPurpleLight group-hover:bg-neonPurple group-hover:text-white group-hover:border-neonPurple font-title font-bold flex items-center justify-center text-sm transition">
+                            ${letters[idx]}
+                        </span>
+                        <span class="text-sm sm:text-base font-medium">${opt}</span>
+                    </div>
+                    <i class="fa-regular fa-circle text-slate-600 group-hover:text-neonPurpleLight text-lg transition"></i>
+                `;
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        // VERIFICAR RESPOSTA SELECIONADA
+        function checkAnswer(selectedIndex) {
+            if (isAnswered) return;
+            isAnswered = true;
+
+            const q = quizQuestions[currentQuestionIndex];
+            const optionsContainer = document.getElementById('options-container');
+            const buttons = optionsContainer.children;
+            const feedbackBox = document.getElementById('feedback-box');
+            const feedbackIcon = document.getElementById('feedback-icon');
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackText = document.getElementById('feedback-text');
+
+            const isCorrect = selectedIndex === q.correct;
+
+            if (isCorrect) {
+                playSound('correct');
+                score += 100 + (streak * 20); // Bônus por combo
+                correctAnswersCount++;
+                streak++;
+
+                // Exibe combo se for maior que 1
+                if (streak > 1) {
+                    document.getElementById('streak-count').innerText = streak;
+                    document.getElementById('streak-badge').classList.remove('hidden');
+                }
+
+                // Estilo do botão selecionado (Certo)
+                buttons[selectedIndex].className = "w-full text-left p-4 rounded-2xl bg-emerald-950/80 border-2 border-emerald-500 text-emerald-200 font-medium flex items-center justify-between";
+                buttons[selectedIndex].querySelector('i').className = "fa-solid fa-circle-check text-emerald-400 text-xl";
+
+                // Estilo da caixa de feedback
+                feedbackBox.className = "rounded-2xl p-4 mb-6 bg-emerald-950/60 border border-emerald-500/50 text-emerald-200 block animate-pop";
+                feedbackIcon.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i>`;
+                feedbackTitle.innerText = "Resposta Correta! Bravo, Romano!";
+            } else {
+                playSound('wrong');
+                streak = 0;
+                document.getElementById('streak-badge').classList.add('hidden');
+
+                // Estilo do botão selecionado (Errado)
+                buttons[selectedIndex].className = "w-full text-left p-4 rounded-2xl bg-rose-950/80 border-2 border-rose-500 text-rose-200 font-medium flex items-center justify-between";
+                buttons[selectedIndex].querySelector('i').className = "fa-solid fa-circle-xmark text-rose-400 text-xl";
+
+                // Destaca a opção correta
+                buttons[q.correct].className = "w-full text-left p-4 rounded-2xl bg-emerald-950/50 border-2 border-emerald-500/80 text-emerald-300 font-medium flex items-center justify-between";
+
+                // Estilo da caixa de feedback
+                feedbackBox.className = "rounded-2xl p-4 mb-6 bg-rose-950/60 border border-rose-500/50 text-rose-200 block animate-pop";
+                feedbackIcon.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-400"></i>`;
+                feedbackTitle.innerText = "Ops! Quase lá...";
+            }
+
+            // Desativa todos os botões
+            for (let btn of buttons) {
+                btn.disabled = true;
+                btn.classList.remove('hover:border-neonPurple/60', 'hover:bg-slate-800');
+            }
+
+            // Atualiza texto de explicação
+            feedbackText.innerHTML = q.explanation;
+
+            // Mostra o botão Próxima
+            const nextBtn = document.getElementById('next-btn');
+            nextBtn.classList.remove('hidden');
+            nextBtn.classList.add('flex');
+
+            updateScoreDisplay();
+        }
+
+        // PRÓXIMA PERGUNTA OU FINALIZAR
+        function nextQuestion() {
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < quizQuestions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        // ATUALIZA PONTUAÇÃO NO TOPO
+        function updateScoreDisplay() {
+            document.getElementById('score-display').innerText = `${score} pts`;
+        }
+
+        // EXIBE A TELA DE RESULTADOS COM MEDALHAS
+        function showResults() {
+            document.getElementById('screen-quiz').classList.add('hidden');
+            document.getElementById('screen-result').classList.remove('hidden');
+
+            playSound('win');
+
+            // Solta confetes festivos
+            try {
+                confetti({
+                    particleCount: 80,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#a855f7', '#c084fc', '#fbbf24', '#38bdf8']
+                });
+            } catch (e) {}
+
+            document.getElementById('stat-correct').innerText = `${correctAnswersCount}/${quizQuestions.length}`;
+            document.getElementById('stat-score').innerText = `${score} pts`;
+
+            // Cálculo do Rank / Medalha
+            const medalIconBox = document.getElementById('medal-icon-box');
+            const rankTitleBadge = document.getElementById('rank-title-badge');
+            const resultMessage = document.getElementById('result-message');
+            const rankDescription = document.getElementById('rank-description');
+
+            if (correctAnswersCount >= 9) {
+                // Imperador / Patrício
+                medalIconBox.innerHTML = "🏛️";
+                medalIconBox.className = "w-24 h-24 rounded-3xl bg-gradient-to-tr from-amber-400 to-yellow-200 text-slate-950 flex items-center justify-center text-5xl mx-auto mb-4 shadow-xl glow-purple-box";
+                rankTitleBadge.innerText = "RANK: IMPERADOR DO BANQUETE";
+                rankTitleBadge.className = "inline-block px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-widest bg-amber-400/20 text-amber-300 border border-amber-400/40 mb-2";
+                resultMessage.innerText = "Incrível! Você dominou todos os segredos da culinária da Roma Antiga!";
+                rankDescription.innerHTML = "🏆 <strong>Conquista de Ouro:</strong> Você conhece a história como um verdadeiro Patrício nobre! Sabe exatamente o que colocar no prato do Imperador.";
+            } else if (correctAnswersCount >= 6) {
+                // Centurião / Gladiador
+                medalIconBox.innerHTML = "⚔️";
+                medalIconBox.className = "w-24 h-24 rounded-3xl bg-gradient-to-tr from-purple-500 to-neonPurpleLight text-white flex items-center justify-center text-5xl mx-auto mb-4 shadow-xl glow-purple-box";
+                rankTitleBadge.innerText = "RANK: GLADIADOR CULINÁRIO";
+                rankTitleBadge.className = "inline-block px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-widest bg-purple-400/20 text-purple-300 border border-purple-400/40 mb-2";
+                resultMessage.innerText = "Muito bem! Seu conhecimento histórico é afiado!";
+                rankDescription.innerHTML = "⚔️ <strong>Conquista de Prata:</strong> Você venceu a maioria dos desafios do banquete! Já pode abrir seu próprio Thermopolium pelas ruas de Roma.";
+            } else {
+                // Plebeu Aprendiz
+                medalIconBox.innerHTML = "🍞";
+                medalIconBox.className = "w-24 h-24 rounded-3xl bg-gradient-to-tr from-slate-600 to-slate-400 text-white flex items-center justify-center text-5xl mx-auto mb-4 shadow-xl";
+                rankTitleBadge.innerText = "RANK: PLEBEU APRENDIZ";
+                rankTitleBadge.className = "inline-block px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-widest bg-slate-400/20 text-slate-300 border border-slate-400/40 mb-2";
+                resultMessage.innerText = "Bom esforço! Que tal jogar de novo para virar um mestre da história?";
+                rankDescription.innerHTML = "🍞 <strong>Conquista de Bronze:</strong> Você já sabe o básico sobre a Puls e o Garum! Jogue novamente para memorizar todos os fatos e subir de rank.";
+            }
+        }
+
+        // REINICIAR O QUIZ
+        function restartQuiz() {
+            startQuiz();
+        }
+    </script>
+</body>
+</html>
